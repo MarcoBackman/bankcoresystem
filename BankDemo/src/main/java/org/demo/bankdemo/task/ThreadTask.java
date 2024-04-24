@@ -1,0 +1,67 @@
+package org.demo.bankdemo.task;
+
+import lombok.extern.slf4j.Slf4j;
+import org.demo.bankdemo.domain.Account;
+import org.demo.bankdemo.domain.Side;
+import org.demo.bankdemo.domain.Transaction;
+import org.demo.bankdemo.exception.TransactionError;
+
+import java.time.OffsetDateTime;
+import java.util.List;
+
+import static org.demo.bankdemo.domain.ErrorCode.ERROR_CODE_003;
+
+/**
+ * This is inappropriate thread since it can be created multiple times
+ */
+@Slf4j
+public class ThreadTask<T> extends Thread {
+
+    private final List<T> listObject;
+
+    public ThreadTask(List<T> listObject) {
+        this.listObject = listObject;
+    }
+
+    @Override
+    public void run() {
+
+        listObject.forEach(object -> {
+            if (object instanceof Transaction transaction) {
+                log.info("Processing Thread transaction. accountName={}", transaction.getAccount().getAccountName());
+                Account account = transaction.getAccount();
+                try {
+                    if (transaction.getSide().equals(Side.WITHDRAW)) {
+                        account.setMoneyAmount(transaction.getTranAmount().negate());
+                    } else if (transaction.getSide().equals(Side.DEPOSIT)) {
+                        account.setMoneyAmount(transaction.getTranAmount());
+                    } else {
+                        throw new TransactionError(ERROR_CODE_003);
+                    }
+                    Thread.sleep(2000);
+                } catch (TransactionError transactionError) {
+                    log.warn("Error on transactionId={}, side={}, tranAmount={}, amountHolding={}, Code={}, Cause={}",
+                            transaction.getSide().name(),
+                            transaction.getTransactionId(),
+                            transaction.getTranAmount(),
+                            account.getAmountCashHolding(),
+                            transactionError.getErrorCode(),
+                            transactionError.getMessage());
+                    transaction.setProcessStatus("FAILED");
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                transaction.setProcessedWhen(OffsetDateTime.now());
+                transaction.setProcessStatus("SUCCESS");
+                log.info("Process Completed for transactionId={}, side={}, tranAmount={}, amountHolding={}",
+                        transaction.getTransactionId(),
+                        transaction.getSide().name(),
+                        transaction.getTranAmount(),
+                        account.getAmountCashHolding());
+            } else {
+                log.warn("Object {} not supported", object.getClass());
+            }
+        });
+    }
+
+}
