@@ -1,15 +1,15 @@
-package org.demo.bankdemo.task;
+package org.demo.bankdemocore.task;
 
 import lombok.extern.slf4j.Slf4j;
-import org.demo.bankdemo.domain.Account;
-import org.demo.bankdemo.domain.Side;
-import org.demo.bankdemo.domain.Transaction;
-import org.demo.bankdemo.exception.TransactionError;
+import org.demo.bankdemocore.domain.Account;
+import org.demo.bankdemocore.domain.Side;
+import org.demo.bankdemocore.domain.Transaction;
+import org.demo.bankdemocore.exception.TransactionError;
 
 import java.time.OffsetDateTime;
 import java.util.List;
 
-import static org.demo.bankdemo.domain.ErrorCode.ERROR_CODE_003;
+import static org.demo.bankdemocore.domain.ErrorCode.ERROR_CODE_003;
 
 /**
  * This is inappropriate thread since it can be created multiple times
@@ -21,6 +21,7 @@ public class ThreadTask<T> extends Thread {
 
     public ThreadTask(List<T> listObject) {
         this.listObject = listObject;
+        this.setDaemon(false);
     }
 
     @Override

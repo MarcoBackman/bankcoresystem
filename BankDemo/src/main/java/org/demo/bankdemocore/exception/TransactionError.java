@@ -1,6 +1,6 @@
-package org.demo.bankdemo.exception;
+package org.demo.bankdemocore.exception;
 
-import org.demo.bankdemo.domain.ErrorCode;
+import org.demo.bankdemocore.domain.ErrorCode;
 
 public class TransactionError extends Exception {
 

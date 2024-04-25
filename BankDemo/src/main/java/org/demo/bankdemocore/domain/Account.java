@@ -1,7 +1,7 @@
-package org.demo.bankdemo.domain;
+package org.demo.bankdemocore.domain;
 
 import lombok.Getter;
-import org.demo.bankdemo.exception.TransactionError;
+import org.demo.bankdemocore.exception.TransactionError;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
