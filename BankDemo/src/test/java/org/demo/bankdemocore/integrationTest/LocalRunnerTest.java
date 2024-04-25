@@ -125,14 +125,15 @@ public class LocalRunnerTest {
 //            log.warn("Process went wrong", exception);
 //        }
 //
-//        try(TransactionProcessor transactionProcessor = new TransactionProcessor()) {
-//            //callable process  with thread pool executor
-//            List<Transaction> allTransactions = getBulkTransactionList();
-//            transactionProcessor.processCallableWithThreadPoolExecutor(allTransactions.stream());
-//        } catch (Exception exception) {
-//            log.warn("Process went wrong", exception);
-//        }
+        try(TransactionProcessor transactionProcessor = new TransactionProcessor()) {
+            //callable process  with thread pool executor
+            List<Transaction> allTransactions = getBulkTransactionList();
+            transactionProcessor.processCallableWithThreadPoolExecutor(allTransactions.stream());
+        } catch (Exception exception) {
+            log.warn("Process went wrong", exception);
+        }
 //
+         //this will not wait the main thread
 //        try(TransactionProcessor transactionProcessor = new TransactionProcessor()) {
 //            //runnable process  with fork join pool
 //            List<Transaction> allTransactions = getBulkTransactionList();
@@ -141,13 +142,14 @@ public class LocalRunnerTest {
 //            log.warn("Process went wrong", exception);
 //        }
 
-        try(TransactionProcessor transactionProcessor = new TransactionProcessor()) {
-            //Custom thread process with thread pool executor
-            List<Transaction> allTransactions = getBulkTransactionList();
-            transactionProcessor.processWithTransactionExecutor(allTransactions.stream());
-        } catch (Exception exception) {
-            log.warn("Process went wrong", exception);
-        }
+        //this will not wait the main thread
+//        try(TransactionProcessor transactionProcessor = new TransactionProcessor()) {
+//            //Custom thread process with thread pool executor
+//            List<Transaction> allTransactions = getBulkTransactionList();
+//            transactionProcessor.processWithTransactionExecutor(allTransactions.stream());
+//        } catch (Exception exception) {
+//            log.warn("Process went wrong", exception);
+//        }
     }
 
     public static void main(String[] args) {

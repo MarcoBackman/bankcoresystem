@@ -21,6 +21,7 @@ public class ThreadTask<T> extends Thread {
 
     public ThreadTask(List<T> listObject) {
         this.listObject = listObject;
+        this.setDaemon(false);
     }
 
     @Override

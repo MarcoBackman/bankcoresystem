@@ -12,8 +12,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 import java.util.stream.Stream;
 
 /**
@@ -24,12 +23,10 @@ import java.util.stream.Stream;
 public class TransactionProcessor implements AutoCloseable {
 
     ExecutorService fixedThreadPool = Executors.newFixedThreadPool(4);
-
-    ExecutorService forkJoinPool = Executors.newWorkStealingPool();
+    ExecutorService forkJoinPool = Executors.newWorkStealingPool(); //forkJoinPool
 
     private Map<String, List<Transaction>> convertToMap(Stream<Transaction> transactions) {
         Map<String, List<Transaction>> transactionMap = new LinkedHashMap<>();
-
         transactions.forEach(transaction -> {
             Account account = transaction.getAccount();
             String key = account.getAccountId();
@@ -43,8 +40,9 @@ public class TransactionProcessor implements AutoCloseable {
         return transactionMap;
     }
 
-    /*
-     * This will not guarantee ordered execution of the transaction
+    /**
+     * This will not guarantee ordered execution of the transaction.
+     * Main thread will 'not' wait until this process completes. Runs independently
      */
     public void processRunnableWithThreadPoolExecutor(Stream<Transaction> transactions) {
         transactions.forEach(transaction -> {
@@ -53,8 +51,9 @@ public class TransactionProcessor implements AutoCloseable {
         });
     }
 
-    /*
-     * This will not guarantee ordered execution of the transaction
+    /**
+     * This will not guarantee ordered execution of the transaction.
+     * Main thread will wait until the entire process completes.
      */
     public void processCallableWithThreadPoolExecutor(Stream<Transaction> transactions) throws InterruptedException {
         List<CallableTask> tasks = new ArrayList<>();
@@ -68,30 +67,29 @@ public class TransactionProcessor implements AutoCloseable {
     }
 
     /**
-     * Fast and utilize all available worker threads.
+     * Fast because it uses all available worker threads.
      * However, this does not guarantee the order of the transactions
      *
      * ForkJoinPool may not work well with Thread.sleep()
-     * @param transactions
-     * @throws InterruptedException
+     *
+     * Main thread will 'not' wait until this process completes. Runs independently
      */
-    public void processTransactionsWithForkJoin(Stream<Transaction> transactions) throws InterruptedException {
+    public void processTransactionsWithForkJoin(Stream<Transaction> transactions) {
         transactions.forEach(transaction -> {
             RunnableTask task = new RunnableTask(transaction);
-            forkJoinPool.execute(task);
+            forkJoinPool.submit(task);
         });
-        //This is needed, otherwise application process will end immediately
-        //Because forkjoinpool needs some time to get initialized before main thread considers there's no thread work to do
-        Thread.sleep(50);
     }
 
-    /*
+    /**
      * This will guarantee ordered execution of the transaction and process orders by each account concurrently
+     * Main thread will 'not' wait until this process completes. Runs independently
      */
     public void processWithTransactionExecutor(Stream<Transaction> transactions) {
         Map<String, List<Transaction>> transactionMap = convertToMap(transactions);
+        fixedThreadPool = Executors.newFixedThreadPool(transactionMap.size());
+
         transactionMap.forEach((s, transactionList) -> {
-            fixedThreadPool = Executors.newFixedThreadPool(transactionMap.size());
             log.info("Thread pool(Account) size={}", transactionMap.size());
             fixedThreadPool.execute(() -> {
                 ThreadTask<Transaction> task = new ThreadTask<>(transactionList);
@@ -102,7 +100,7 @@ public class TransactionProcessor implements AutoCloseable {
 
     @Override
     public void close() {
-        log.info("Terminating threadPool.... had active pool size={}", Thread.activeCount());
+        log.info("Ordered pool shut down. This will shutdown after all working threads are finished");
         fixedThreadPool.shutdown();
         forkJoinPool.shutdown();
     }
