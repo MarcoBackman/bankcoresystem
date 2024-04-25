@@ -1,4 +1,4 @@
-package org.demo.bankdemo.util;
+package org.demo.bankdemocore.util;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

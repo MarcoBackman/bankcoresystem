@@ -1,11 +1,11 @@
-package org.demo.bankdemo.processor;
+package org.demo.bankdemocore.processor;
 
 import lombok.extern.slf4j.Slf4j;
-import org.demo.bankdemo.domain.Account;
-import org.demo.bankdemo.domain.Transaction;
-import org.demo.bankdemo.task.CallableTask;
-import org.demo.bankdemo.task.RunnableTask;
-import org.demo.bankdemo.task.ThreadTask;
+import org.demo.bankdemocore.domain.Account;
+import org.demo.bankdemocore.domain.Transaction;
+import org.demo.bankdemocore.task.CallableTask;
+import org.demo.bankdemocore.task.RunnableTask;
+import org.demo.bankdemocore.task.ThreadTask;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package org.demo.bankdemo.domain;
+package org.demo.bankdemocore.domain;
 
 public enum Side {
     WITHDRAW,

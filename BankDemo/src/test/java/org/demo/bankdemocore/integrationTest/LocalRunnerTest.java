@@ -1,11 +1,11 @@
-package org.demo.bankdemo.integrationTest;
+package org.demo.bankdemocore.integrationTest;
 
 import lombok.extern.slf4j.Slf4j;
-import org.demo.bankdemo.domain.Account;
-import org.demo.bankdemo.domain.Side;
-import org.demo.bankdemo.domain.Transaction;
-import org.demo.bankdemo.processor.TransactionProcessor;
-import org.demo.bankdemo.util.RandomGenerator;
+import org.demo.bankdemocore.domain.Account;
+import org.demo.bankdemocore.domain.Side;
+import org.demo.bankdemocore.domain.Transaction;
+import org.demo.bankdemocore.processor.TransactionProcessor;
+import org.demo.bankdemocore.util.RandomGenerator;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;

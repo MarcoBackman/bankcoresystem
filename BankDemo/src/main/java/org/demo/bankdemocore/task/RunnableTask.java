@@ -1,15 +1,15 @@
-package org.demo.bankdemo.task;
+package org.demo.bankdemocore.task;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.demo.bankdemo.domain.Account;
-import org.demo.bankdemo.domain.Side;
-import org.demo.bankdemo.domain.Transaction;
-import org.demo.bankdemo.exception.TransactionError;
+import org.demo.bankdemocore.domain.Account;
+import org.demo.bankdemocore.domain.Side;
+import org.demo.bankdemocore.domain.Transaction;
+import org.demo.bankdemocore.exception.TransactionError;
 
 import java.time.OffsetDateTime;
 
-import static org.demo.bankdemo.domain.ErrorCode.ERROR_CODE_003;
+import static org.demo.bankdemocore.domain.ErrorCode.ERROR_CODE_003;
 
 @Slf4j
 @RequiredArgsConstructor
