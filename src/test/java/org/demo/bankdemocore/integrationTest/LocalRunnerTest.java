@@ -12,7 +12,6 @@ import java.time.OffsetDateTime;
 import java.util.*;
 
 @Slf4j
-
 public class LocalRunnerTest {
 
     Account testAccount1 = new Account(1);

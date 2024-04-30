@@ -7,7 +7,8 @@ public enum ErrorCode {
 
     ERROR_CODE_001("001", "Account has insufficient amount of money"),
     ERROR_CODE_002("002", "Zero amount transaction given"),
-    ERROR_CODE_003("003", "Unsupported transaction operation type");
+    ERROR_CODE_003("003", "Unsupported transaction operation type"),
+    ERROR_CODE_00_N1("-001", "Test");
 
     public final String code;
     public final String message;

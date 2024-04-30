@@ -1,6 +1,7 @@
 package org.demo.bankdemocore.kafka;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Component;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.CompletableFuture;
 
 @Component
+@ConditionalOnProperty(name = "kafka.enable", havingValue = "true")
 public class KafkaProducer {
 
     @Value(value = "${spring.kafka.template.default-topic}")
