@@ -27,6 +27,7 @@ public class RunnableTask implements Runnable {
 
         Account account = transaction.getAccount();
 
+
         try {
             if (transaction.getSide().equals(Side.WITHDRAW)) {
                 account.setMoneyAmount(transaction.getTranAmount().negate());
