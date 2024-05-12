@@ -1,24 +1,28 @@
 package org.demo.bankdemocore.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import org.demo.bankdemocore.exception.TransactionError;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
+@Builder
 public class Account {
-    private final String accountId;
-    private final String accountNo;
-    private final String accountName;
+    private String accountId;
+    private String accountNo;
+    private String username;
+    private LocalDateTime createdWhen;
     private volatile BigDecimal amountCashHolding; //BigDecimal is already immutable
 
-    public Account(int generationNumber) {
+    public Account createNewAccount(int generationNumber) {
         accountId = UUID.randomUUID().toString();
-        accountNo = "TEST" + LocalDate.now().toString().substring(0, 6);
-        accountName = "TEST_" + generationNumber;
-        amountCashHolding = BigDecimal.ZERO;
+        accountNo = accountId.substring(0, 2) + LocalDate.now().toString().substring(0, 6);
+        amountCashHolding = BigDecimal.ZERO; //TODO: retrieve account's amount cash from different source
+        return this;
     }
 
     public synchronized void setMoneyAmount(BigDecimal cashAmount) throws TransactionError {

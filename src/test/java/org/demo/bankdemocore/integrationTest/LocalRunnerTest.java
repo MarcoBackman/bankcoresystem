@@ -6,17 +6,24 @@ import org.demo.bankdemocore.domain.Side;
 import org.demo.bankdemocore.domain.Transaction;
 import org.demo.bankdemocore.processor.TransactionProcessor;
 import org.demo.bankdemocore.util.RandomGenerator;
+import org.jetbrains.annotations.TestOnly;
 
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Slf4j
 public class LocalRunnerTest {
 
-    Account testAccount1 = new Account(1);
-    Account testAccount2 = new Account(2);
-    Account testAccount3 = new Account(3);
+    Account testAccount1 = Account.builder().build();
+    Account testAccount2 = Account.builder().build();
+    Account testAccount3 = Account.builder().build();
+
+    LocalRunnerTest() {
+        testAccount1.createNewAccount(1);
+        testAccount1.createNewAccount(2);
+        testAccount1.createNewAccount(3);
+    }
 
     private List<Transaction> generateRandomTransactions(BigDecimal minTranAmount,
                                                          BigDecimal maxTranAmount,
@@ -75,12 +82,13 @@ public class LocalRunnerTest {
         return allTransactions;
     }
 
+    @TestOnly
     private List<Transaction> getManualTransactionListForSingleAccount() {
         List<Transaction> allTransactions = new ArrayList<>();
 
         allTransactions.add(Transaction.builder()
                 .account(testAccount1)
-                .receivedWhen(OffsetDateTime.now())
+                .receivedWhen(LocalDateTime.now())
                 .side(Side.DEPOSIT)
                 .tranAmount(BigDecimal.valueOf(20))
                 .transactionId(UUID.randomUUID().toString())
@@ -88,7 +96,7 @@ public class LocalRunnerTest {
 
         allTransactions.add(Transaction.builder()
                 .account(testAccount1)
-                .receivedWhen(OffsetDateTime.now())
+                .receivedWhen(LocalDateTime.now())
                 .side(Side.WITHDRAW)
                 .tranAmount(BigDecimal.valueOf(120))
                 .transactionId(UUID.randomUUID().toString())
@@ -96,7 +104,7 @@ public class LocalRunnerTest {
 
         allTransactions.add(Transaction.builder()
                 .account(testAccount1)
-                .receivedWhen(OffsetDateTime.now())
+                .receivedWhen(LocalDateTime.now())
                 .side(Side.DEPOSIT)
                 .tranAmount(BigDecimal.valueOf(120))
                 .transactionId(UUID.randomUUID().toString())
@@ -104,7 +112,7 @@ public class LocalRunnerTest {
 
         allTransactions.add(Transaction.builder()
                 .account(testAccount1)
-                .receivedWhen(OffsetDateTime.now())
+                .receivedWhen(LocalDateTime.now())
                 .side(Side.WITHDRAW)
                 .tranAmount(BigDecimal.valueOf(140))
                 .transactionId(UUID.randomUUID().toString())

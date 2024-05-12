@@ -6,7 +6,7 @@ import org.demo.bankdemocore.domain.Side;
 import org.demo.bankdemocore.domain.Transaction;
 import org.demo.bankdemocore.exception.TransactionError;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.demo.bankdemocore.domain.ErrorCode.ERROR_CODE_003;
@@ -29,7 +29,7 @@ public class ThreadTask<T> extends Thread {
 
         listObject.forEach(object -> {
             if (object instanceof Transaction transaction) {
-                log.info("Processing Thread transaction. accountName={}", transaction.getAccount().getAccountName());
+                log.info("Processing Thread transaction. accountNo={}", transaction.getAccount().getAccountNo());
                 Account account = transaction.getAccount();
                 try {
                     if (transaction.getSide().equals(Side.WITHDRAW)) {
@@ -52,7 +52,7 @@ public class ThreadTask<T> extends Thread {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                transaction.setProcessedWhen(OffsetDateTime.now());
+                transaction.setProcessedWhen(LocalDateTime.now());
                 transaction.setProcessStatus("SUCCESS");
                 log.info("Process Completed for transactionId={}, side={}, tranAmount={}, amountHolding={}",
                         transaction.getTransactionId(),
