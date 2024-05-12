@@ -3,34 +3,42 @@
 ### A core processing demo service to handle multiple transactions in a short time.
 
 For bank system demo project.</br>
-Related repositories
-
-1. Need kafka security to be configured
-2. Need gateway repo to be implemented
-3. Need service discovery repo to be implemented
-4. Need cloud config server repo to be implemented
-5. Requires Frontend service to be implemented
-
 
 ---
 ### Main dependencies/features
 - PostgresSQL
 - KafkaListener (consumer)
 - Various types of thread handling processor
-- API controllers for testing
+- API controllers for testing (Todo)
+
+### Prerequisites
+
+- Integration tool to set up local PSQL, Kafka, Flyway, Kafka-ui(for producer test)
+  <br/>[Integration-testing repo](`https://github.com/MarcoBackman/integration-testing-tool.git`)
+- `Todo: Front end service to perform UI testing.`
+
+### Active property, environment variables setup
+
+- For **local application run**, enable active properties as following.
+`default,local`
+- For environment variables, you must provide db information like below. (replace from `{...}` with your configurations)
+`DB_NAME={db_name};DB_PASSWORD={db_pass};DB_USER={db_user}`
+
+
+- For **maven test run**, setup environment variables same as above and run `local,test` as active profile
+
+- For **maven install**, setup environment variables same as above and run `default,local,test` as active profile
 
 ---
 ### How to set up and run locally
 ```
- Todo: Implement integration testing service to activate local kafka brokers and zookeeper with proper topic.
- Todo: Implement local PSQL service to make this service to connect fully functional database automatically (with test datasets too).
  Run BankDemoApplication under src.main.java.org.demo.bankdemo.util
  
- Todo:provide API services to integration testing
+ Todo:provide API services for integration testing
  Todo:provide secured kafka connection (Consumer side SSL or SASL SSO)
  
 ```
 
-Last updated date: April 24, 2024.
+Last updated date: May 18, 2024.
 
 ---

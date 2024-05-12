@@ -7,7 +7,7 @@ import org.demo.bankdemocore.domain.Side;
 import org.demo.bankdemocore.domain.Transaction;
 import org.demo.bankdemocore.exception.TransactionError;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.concurrent.Callable;
 
 import static org.demo.bankdemocore.domain.ErrorCode.ERROR_CODE_003;
@@ -55,7 +55,7 @@ public class CallableTask implements Callable<Transaction> {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        transaction.setProcessedWhen(OffsetDateTime.now());
+        transaction.setProcessedWhen(LocalDateTime.now());
         log.info("Process Completed for transactionId={}, side={}, tranAmount={}, amountHolding={}",
                 transaction.getTransactionId(),
                 transaction.getSide().name(),

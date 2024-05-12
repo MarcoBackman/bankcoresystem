@@ -7,7 +7,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 
 @Builder
 @Getter
@@ -21,9 +21,9 @@ public class Transaction {
     @NotNull
     private final Side side;
     @Setter
-    private OffsetDateTime receivedWhen;
+    private LocalDateTime receivedWhen;
     @Setter
-    private OffsetDateTime processedWhen;
+    private LocalDateTime processedWhen;
     @Setter
     private LocalDate settledDate;
     @Setter

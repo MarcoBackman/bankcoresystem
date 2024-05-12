@@ -7,7 +7,7 @@ import org.demo.bankdemocore.domain.Side;
 import org.demo.bankdemocore.domain.Transaction;
 import org.demo.bankdemocore.exception.TransactionError;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 
 import static org.demo.bankdemocore.domain.ErrorCode.ERROR_CODE_003;
 
@@ -50,7 +50,7 @@ public class RunnableTask implements Runnable {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        transaction.setProcessedWhen(OffsetDateTime.now());
+        transaction.setProcessedWhen(LocalDateTime.now());
         transaction.setProcessStatus("SUCCESS");
         log.info("Process Completed for transactionId={}, side={}, tranAmount={}, amountHolding={}",
                 transaction.getTransactionId(),

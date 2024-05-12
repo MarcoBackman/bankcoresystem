@@ -14,18 +14,56 @@ on:
   pull_request:
     branches: [ "main" ]
 
+env:
+  DB_NAME: ${{ secrets.PSQL_DB_NAME }}
+  DB_USER: ${{ secrets.PSQL_DB_USER }}
+  DB_PASSWORD: ${{ secrets.PSQL_DB_PASSWORD }}
+
 jobs:
-  build:
-
+  application-build:
     runs-on: ubuntu-latest
-
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_DB_NAME: ${{ secrets.PSQL_DB_NAME }}
+          POSTGRES_DB_USER: ${{ secrets.PSQL_DB_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.PSQL_DB_PASSWORD }}
+          PGPASSWORD: ${{ secrets.PSQL_DB_PASSWORD }}
+        options:
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
     steps:
-    - uses: actions/checkout@v3
+    - run: sudo apt-get install postgresql-client
+    - name: create db
+      env:
+        POSTGRES_PASSWORD: ${{ secrets.PSQL_DB_PASSWORD }}
+        PGPASSWORD: ${{ secrets.PSQL_DB_PASSWORD }}
+      run: |
+        psql -h localhost -U ${{ secrets.PSQL_DB_USER }} -c 'CREATE ROLE root'
+        psql -h localhost -U ${{ secrets.PSQL_DB_USER }} -c 'CREATE DATABASE ${{ secrets.PSQL_DB_NAME }}'
+
+#    - name: RunFlywayMigration
+#      uses: actions/checkout@v3.0.0
+#      run: wget -qO- https://download.red-gate.com/maven/release/com/redgate/flyway/flyway-commandline/10.7.1/flyway-commandline-10.7.1-linux-x64.tar.gz | tar -xvz && sudo ln -s `pwd`/flyway-10.7.1/flyway /usr/local/bin |
+#        flyway -user="${{ secrets.PSQL_DB_USER }}" -password="${{ secrets.PSQL_DB_PASSWORD }}" -url="jdbc:postgresql://localhost:5432/${{ secrets.PSQL_DB_NAME }}" info |
+#        flyway -user="${{ secrets.PSQL_DB_USER }}" -password="${{ secrets.PSQL_DB_PASSWORD }}" -url="jdbc:postgresql://localhost:5432/${{ secrets.PSQL_DB_NAME }}" migrate |
+
+    - name: Check out Repository
+      uses: actions/checkout@v3
     - name: Set up JDK 17
       uses: actions/setup-java@v3
       with:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
+    - name: Maven flyway
+      run: mvn --settings ~/.m2/settings.xml --file ./pom.xml clean flyway:migrate
+    - name: Maven compile
+      run: mvn --settings ~/.m2/settings.xml --file ./pom.xml clean compile
     - name: Build with Maven
-      run: mvn -B package --file ./pom.xml
+      run: mvn --settings ~/.m2/settings.xml -B package --file ./pom.xml
