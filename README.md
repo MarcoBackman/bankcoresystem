@@ -32,7 +32,7 @@ For bank system demo project.</br>
 ### How to set up and run locally
 
 > [!CAUTION] 
-> Make sure that environment variables are set correctly and your target db is running
+> Make sure that environment variables are set correctly and your target db is running. </br>
 > Make sure your kafka system is running (zookeeper and brokers)
 
 1. Run flyway migration via integration testing tool or directly by executing maven flyway
